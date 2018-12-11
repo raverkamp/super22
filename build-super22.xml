@@ -1,0 +1,38 @@
+<project name="super22" default="dist" basedir=".">
+  <description>
+    build super22
+  </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  
+  <target name="init">
+    <mkdir dir="${build}"/>
+  </target>
+  
+  <target name="compile" depends="init"
+          description="compile the source " >
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+  </target>
+  
+  <target name="dist" depends="compile"
+          description="generate the distribution" >
+    <copy file="${runner}" tofile="${build}/jetty-runner.jar"/>
+    <copy file="${warfile}" tofile="${build}/warfile.war"/>
+    <jar jarfile="${dist}/${targetjar}" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class"
+                   value="spinat.super22.Main"/>
+        <attribute name="port"
+        value="${port}"/>
+      </manifest>
+    </jar>
+  </target>
+  
+  <target name="clean"
+          description="clean up" >
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
