@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -40,9 +42,13 @@ public class Main {
                 .getResources("META-INF/MANIFEST.MF");
         while (resources.hasMoreElements()) {
             URL manifestUrl = resources.nextElement();
+            System.out.println(manifestUrl);
             Manifest manifest = new Manifest(manifestUrl.openStream());
             Attributes mainAttributes = manifest.getMainAttributes();
-            return mainAttributes.getValue(attr);
+            String s= mainAttributes.getValue(attr);
+            if (s!=null) {
+              return s;
+            }
         }
         throw new RuntimeException("no port attribute found");
     }
@@ -55,7 +61,7 @@ public class Main {
                 connection.setRequestMethod("GET");
                 connection.getContent();
                 break;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Thread.sleep(500);
             }
         }
@@ -77,7 +83,8 @@ public class Main {
         String mainClass = a.getValue(Attributes.Name.MAIN_CLASS);
         Class c = cl.loadClass(mainClass);
         Method m = c.getMethod("main", new Class[]{args.getClass()});
-        String portStr = findAttributeString("port");
+        String portStr = findAttributeString("super22-port");
+        System.err.println("#" + portStr + "#");
         int port = Integer.parseInt(portStr);
         Thread t = new Thread(new Runnable() {
             @Override

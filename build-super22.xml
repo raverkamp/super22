@@ -24,7 +24,7 @@
       <manifest>
         <attribute name="Main-Class"
                    value="spinat.super22.Main"/>
-        <attribute name="port"
+        <attribute name="super22-port"
         value="${port}"/>
       </manifest>
     </jar>
